@@ -173,7 +173,9 @@ func wndProc(hWnd uintptr, msg uint32, wParam, lParam uintptr) uintptr {
 		case win.NIN_BALLOONUSERCLICK:
 			log.Print("User has clicked the balloon message")
 		case win.WM_LBUTTONDOWN:
-			clickHandler()
+			//clickHandler(hWnd,msg)
+			win.PostQuitMessage(0)
+
 		}
 	case win.WM_DESTROY:
 		win.PostQuitMessage(0)
@@ -183,7 +185,7 @@ func wndProc(hWnd uintptr, msg uint32, wParam, lParam uintptr) uintptr {
 	return 0
 }
 
-func createMainWindow() (uintptr, error) {
+func CreateMainWindow() (uintptr, error) {
 	hInstance := win.GetModuleHandle(nil)
 
 	wndClass := windows.StringToUTF16Ptr("MyWindow")
@@ -236,12 +238,15 @@ func loadIconFromFile(name string) (uintptr, error) {
 	return hIcon, nil
 }
 
-func clickHandler() {
-	log.Print("User has clicked the notify icon")
-}
+//func clickHandler(hWnd uintptr, msg string) {
+//	fmt.Println("User has clicked the notify icon")
+//	fmt.Println(msg)
+//	win.DestroyIcon(hWnd);
+//}
 
-func start(message string, tooltip string, icon string) {
+func start(message string, tooltip string, icon string, ni *notifyIcon) {
 
+	//var msg win.MSG
 	// defer user32.Release()
 	needSendNotificationWithIcon := true
 
@@ -251,41 +256,55 @@ func start(message string, tooltip string, icon string) {
 	var hIcon uintptr
 	var err error
 	if needSendNotificationWithIcon {
-		hIcon, err = loadIconFromFile(icon) // fallback to use file
+
+		hIcon, err = loadIconFromResource(10) // rsrc uses 10 for icon resource id
 		if err != nil {
-			needSendNotificationWithIcon = false
+			hIcon, err = loadIconFromFile(icon) // fallback to use file
+			if err != nil {
+				needSendNotificationWithIcon = false
+			} else {
+				defer win.DestroyIcon(hIcon)
+			}
 		}
 	}
 
-	hwnd, err := createMainWindow()
-	if err != nil {
-		panic(err)
-	}
+	//hwnd, err := createMainWindow()
+	//if err != nil {
+	//	panic(err)
+	//}
 
-	ni, err := newNotifyIcon(hwnd)
-	if err != nil {
-		panic(err)
-	}
-	defer ni.Dispose()
-
-	//ni.SetIcon(hIcon)
 	ni.SetTooltip(tooltip)
 	if needSendNotificationWithIcon {
+		ni.SetIcon(hIcon)
 		ni.ShowNotificationWithIcon(tooltip, message, hIcon)
 	} else {
 		ni.ShowNotification(tooltip, message)
 	}
+	//defer ni.Dispose()
 	//ni.ShowNotificationWithIcon(tooltip, message,nil)
+	//for win.GetMessage(&msg, 0, 0, 0) != 0 {
+	//	win.TranslateMessage(&msg)
+	//	win.DispatchMessage(&msg)
+	//}
 
-	var msg win.MSG
-	for win.GetMessage(&msg, 0, 0, 0) != 0 {
-		win.TranslateMessage(&msg)
-		win.DispatchMessage(&msg)
-	}
 }
 
-func SendMessage(message string, tooltip string, icon string) {
+func CreateSender() *notifyIcon {
+	windowId, err := CreateMainWindow()
+	if err != nil {
+		panic(err)
+	}
+	ni, err := newNotifyIcon(windowId)
+	if err != nil {
+		panic(err)
+	}
+	return ni
+
+}
+
+func SendMessage(message string, tooltip string, icon string, ni *notifyIcon) {
 
 	hideConsole()
-	start(message, tooltip, icon)
+	start(message, tooltip, icon, ni)
+
 }
