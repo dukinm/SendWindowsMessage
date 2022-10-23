@@ -263,9 +263,10 @@ func start(message string, tooltip string, icon string) {
 	}
 	defer ni.Dispose()
 
-	ni.SetIcon(hIcon)
+	//ni.SetIcon(hIcon)
 	ni.SetTooltip(tooltip)
 	ni.ShowNotificationWithIcon(tooltip, message, hIcon)
+	//ni.ShowNotificationWithIcon(tooltip, message,nil)
 
 	var msg win.MSG
 	for win.GetMessage(&msg, 0, 0, 0) != 0 {
@@ -277,5 +278,5 @@ func start(message string, tooltip string, icon string) {
 func SendMessage(message string, tooltip string, icon string) {
 
 	hideConsole()
-	start(message, tooltip, "icon.svg")
+	start(message, tooltip, "icon.ico")
 }
