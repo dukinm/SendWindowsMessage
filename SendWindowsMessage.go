@@ -243,14 +243,19 @@ func clickHandler() {
 func start(message string, tooltip string, icon string) {
 
 	// defer user32.Release()
-	hIcon, err := loadIconFromResource(10) // rsrc uses 10 for icon resource id
-	if err != nil {
+	needSendNotificationWithIcon := true
+
+	if len(icon) == 0 {
+		needSendNotificationWithIcon = false
+	}
+	var hIcon uintptr
+	var err error
+	if needSendNotificationWithIcon {
 		hIcon, err = loadIconFromFile(icon) // fallback to use file
 		if err != nil {
-			panic(err)
+			needSendNotificationWithIcon = false
 		}
 	}
-	defer win.DestroyIcon(hIcon)
 
 	hwnd, err := createMainWindow()
 	if err != nil {
@@ -265,7 +270,11 @@ func start(message string, tooltip string, icon string) {
 
 	//ni.SetIcon(hIcon)
 	ni.SetTooltip(tooltip)
-	ni.ShowNotificationWithIcon(tooltip, message, hIcon)
+	if needSendNotificationWithIcon {
+		ni.ShowNotificationWithIcon(tooltip, message, hIcon)
+	} else {
+		ni.ShowNotification(tooltip, message)
+	}
 	//ni.ShowNotificationWithIcon(tooltip, message,nil)
 
 	var msg win.MSG
@@ -278,5 +287,5 @@ func start(message string, tooltip string, icon string) {
 func SendMessage(message string, tooltip string, icon string) {
 
 	hideConsole()
-	start(message, tooltip, "icon.ico")
+	start(message, tooltip, icon)
 }
