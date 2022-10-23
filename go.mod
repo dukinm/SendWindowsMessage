@@ -1,4 +1,4 @@
-module SendWindowsMessage
+module github.com/dukinm/SendWindowsMessage
 
 go 1.18
 
