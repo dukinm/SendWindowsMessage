@@ -2,6 +2,6 @@ package SendWindowMessage
 
 import "fmt"
 
-func sendMessage(message string) {
+func SendMessage(message string) {
 	fmt.Println(message)
 }
