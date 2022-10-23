@@ -1,0 +1,8 @@
+github.com/dukinm/SendWindowsMessage v0.0.0-20221023134516-3978806cbc35 h1:jFI3oLPYoBtW+q2DQQjjNLnYt1xGzpQYlX3Or20JmDY=
+github.com/dukinm/SendWindowsMessage v0.0.0-20221023134516-3978806cbc35/go.mod h1:lEkThTWjCahP4AIhSWuEbzz9YWAvYLduLNIrYAh2byM=
+github.com/gonutz/ide v0.0.0-20200517034207-df64a3832118 h1:UDRbotTOMtkuf7TTJQPiSVjdRZqUmi1oGe5fUs2hLww=
+github.com/gonutz/ide v0.0.0-20200517034207-df64a3832118/go.mod h1:x+4ZwoglBL1JMgoEUVV5zw/lfCQmcwrhZqox7FuSgSk=
+github.com/hallazzang/go-windows-programming v0.0.0-20190526062745-ff0b400d8c7b h1:nvshX00dDuFF+SeLjM2aifVPq6u4K5XtnjgF2zy91q0=
+github.com/hallazzang/go-windows-programming v0.0.0-20190526062745-ff0b400d8c7b/go.mod h1:cZ6tEkgp3+YsYT6Uh2HuoEifMLZ8QzjJIbOY//kwD1g=
+golang.org/x/sys v0.1.0 h1:kunALQeHf1/185U1i0GOB/fy1IPRDDpuoOOqRReG57U=
+golang.org/x/sys v0.1.0/go.mod h1:oPkhp1MJrh7nUepCBck5+mAzfO9JrbApNNgaTdGDITg=
