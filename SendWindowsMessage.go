@@ -1,4 +1,4 @@
-package SendWindowMessage
+package SendWindowsMessage
 
 import (
 	"errors"
