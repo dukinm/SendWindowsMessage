@@ -33,7 +33,7 @@ func init() {
 	rand.Seed(time.Now().UnixNano())
 }
 
-type notifyIcon struct {
+type NotifyIcon struct {
 	hwnd uintptr
 	guid win.GUID
 }
@@ -54,8 +54,8 @@ func hideConsole() {
 		w32.ShowWindowAsync(console, w32.SW_HIDE)
 	}
 }
-func newNotifyIcon(hwnd uintptr) (*notifyIcon, error) {
-	ni := &notifyIcon{
+func newNotifyIcon(hwnd uintptr) (*NotifyIcon, error) {
+	ni := &NotifyIcon{
 		hwnd: hwnd,
 		guid: newGUID(),
 	}
@@ -68,11 +68,11 @@ func newNotifyIcon(hwnd uintptr) (*notifyIcon, error) {
 	return ni, nil
 }
 
-func (ni *notifyIcon) Dispose() {
+func (ni *NotifyIcon) Dispose() {
 	win.Shell_NotifyIcon(win.NIM_DELETE, ni.newData())
 }
 
-func (ni *notifyIcon) SetTooltip(tooltip string) error {
+func (ni *NotifyIcon) SetTooltip(tooltip string) error {
 	data := ni.newData()
 	data.UFlags |= win.NIF_TIP
 	copy(data.SzTip[:], windows.StringToUTF16(tooltip))
@@ -82,7 +82,7 @@ func (ni *notifyIcon) SetTooltip(tooltip string) error {
 	return nil
 }
 
-func (ni *notifyIcon) SetIcon(hIcon uintptr) error {
+func (ni *NotifyIcon) SetIcon(hIcon uintptr) error {
 	data := ni.newData()
 	data.UFlags |= win.NIF_ICON
 	data.HIcon = hIcon
@@ -92,7 +92,7 @@ func (ni *notifyIcon) SetIcon(hIcon uintptr) error {
 	return nil
 }
 
-func (ni *notifyIcon) ShowNotification(title, text string) error {
+func (ni *NotifyIcon) ShowNotification(title, text string) error {
 	data := ni.newData()
 	data.UFlags |= win.NIF_INFO
 	copy(data.SzInfoTitle[:], windows.StringToUTF16(title))
@@ -103,7 +103,7 @@ func (ni *notifyIcon) ShowNotification(title, text string) error {
 	return nil
 }
 
-func (ni *notifyIcon) ShowNotificationWithIcon(title, text string, hIcon uintptr) error {
+func (ni *NotifyIcon) ShowNotificationWithIcon(title, text string, hIcon uintptr) error {
 	data := ni.newData()
 	data.UFlags |= win.NIF_INFO
 	copy(data.SzInfoTitle[:], windows.StringToUTF16(title))
@@ -115,7 +115,7 @@ func (ni *notifyIcon) ShowNotificationWithIcon(title, text string, hIcon uintptr
 	return nil
 }
 
-func (ni *notifyIcon) newData() *win.NOTIFYICONDATA {
+func (ni *NotifyIcon) newData() *win.NOTIFYICONDATA {
 	var nid win.NOTIFYICONDATA
 	nid.CbSize = uint32(unsafe.Sizeof(nid))
 	nid.UFlags = win.NIF_GUID
@@ -244,7 +244,7 @@ func loadIconFromFile(name string) (uintptr, error) {
 //	win.DestroyIcon(hWnd);
 //}
 
-func start(message string, tooltip string, icon string, ni *notifyIcon) {
+func start(message string, tooltip string, icon string, ni *NotifyIcon) {
 
 	//var msg win.MSG
 	// defer user32.Release()
@@ -289,7 +289,7 @@ func start(message string, tooltip string, icon string, ni *notifyIcon) {
 
 }
 
-func CreateSender() *notifyIcon {
+func CreateSender() *NotifyIcon {
 	windowId, err := CreateMainWindow()
 	if err != nil {
 		panic(err)
@@ -302,7 +302,7 @@ func CreateSender() *notifyIcon {
 
 }
 
-func SendMessage(message string, tooltip string, icon string, ni *notifyIcon) {
+func SendMessage(message string, tooltip string, icon string, ni *NotifyIcon) {
 
 	hideConsole()
 	start(message, tooltip, icon, ni)
